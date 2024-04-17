@@ -1,6 +1,6 @@
 <h1>ExpNo 5 : Implement Minimax Search Algorithm for a Simple TIC-TAC-TOE game</h1> 
-<h3>Name: Saravanan N</h3>
-<h3>Register Number/Staff Id: TSML006</h3>
+<h3>Name: Manoj Kumar S</h3>
+<h3>Register Number:212223240082</h3>
 <H3>Aim:</H3>
 <p>
     Implement Minimax Search Algorithm for a Simple TIC-TAC-TOE game
@@ -103,6 +103,124 @@ def minimax(game)
 end
 
 <hr>
+<h2>Program</h2>
+
+'''py
+
+
+class TicTacToe:
+
+    def __init__(self):
+        self.board = [' ']*9
+        self.players = ['X', 'O']
+        self.active_player = 'X'
+
+    def print_board(self):
+        # Print the current state of the board
+        for i in range(0, 9, 3):
+            print('|'.join(self.board[i:i+3]))
+            if i < 6:
+                print('-'*5)
+
+    def get_available_moves(self):
+        # Return a list of available moves (empty cells)
+        return [i for i, mark in enumerate(self.board) if mark == ' ']
+
+    def apply_move(self, move):
+        # Apply the move to the board
+        self.board[move] = self.active_player
+        # Switch active player
+        self.active_player = self.players[(self.players.index(self.active_player) + 1) % 2]
+
+    def is_winner(self, player):
+        # Check if the given player has won
+        winning_combinations = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Columns
+            [0, 4, 8], [2, 4, 6]              # Diagonals
+        ]
+        for combo in winning_combinations:
+            if all(self.board[i] == player for i in combo):
+                return True
+        return False
+
+    def is_full(self):
+        # Check if the board is full
+        return ' ' not in self.board
+
+    def is_terminal(self):
+        # Check if the game is in a terminal state (win, draw)
+        return self.is_winner('X') or self.is_winner('O') or self.is_full()
+
+    def get_score(self):
+        # Return the score of the current state
+        if self.is_winner('X'):
+            return 1
+        elif self.is_winner('O'):
+            return -1
+        else:
+            return 0
+
+def minimax(game):
+    if game.is_terminal():
+        return game.get_score()
+
+    scores = []
+    moves = []
+
+    for move in game.get_available_moves():
+        possible_game = TicTacToe()
+        possible_game.board = game.board[:]
+        possible_game.active_player = game.active_player
+        possible_game.apply_move(move)
+        scores.append(minimax(possible_game))
+        moves.append(move)
+
+    if game.active_player == 'X':
+        return max(scores)
+    else:
+        return min(scores)
+
+def find_best_move(game):
+    scores = []
+    moves = []
+
+    for move in game.get_available_moves():
+        possible_game = TicTacToe()
+        possible_game.board = game.board[:]
+        possible_game.active_player = game.active_player
+        possible_game.apply_move(move)
+        scores.append(minimax(possible_game))
+        moves.append(move)
+
+    if game.active_player == 'X':
+        best_move_index = scores.index(max(scores))
+    else:
+        best_move_index = scores.index(min(scores))
+
+    return moves[best_move_index]
+
+# Example usage:
+game = TicTacToe()
+game.print_board()
+while not game.is_terminal():
+    if game.active_player == 'X':
+        move = int(input("Enter your move (0-8): "))
+    else:
+        print("Computer is thinking...")
+        move = find_best_move(game)
+    game.apply_move(move)
+    game.print_board()
+
+# Print result
+if game.is_winner('X'):
+    print("Congratulations! You won!")
+elif game.is_winner('O'):
+    print("Computer wins!")
+else:
+    print("It's a draw!")
+
+'''
 <h2>Sample Input and Output</h2>
 
 ![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/6b668685-8bcc-43c5-b5c2-ddd43f3da84a)
@@ -112,5 +230,10 @@ end
 ![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/a2acb6a1-ed8e-42e5-8968-fe805e4b0255)
 
 <hr>
+
+<h2>output</h2>
+<img width="1280" alt="Screen Shot 1946-01-27 at 20 31 48 copy" src="https://github.com/vikamuhan-reddy/19AI405ExpNo6/assets/144928933/9c03179f-2a72-482d-95a7-a835271de101">
+<img width="1280" alt="Screen Shot 1946-01-27 at 20 36 25" src="https://github.com/vikamuhan-reddy/19AI405ExpNo6/assets/144928933/dceb88cc-2853-44fa-858c-d76185cab4b1">
+
 <h2>Result:</h2>
-<p>Thus,Implementation of  Minimax Search Algorithm for a Simple TIC-TAC-TOE game wasa done successfully.</p>
+<p>Thus,Implementation of  Minimax Search Algorithm for a Simple TIC-TAC-TOE game was done successfully.</p>
